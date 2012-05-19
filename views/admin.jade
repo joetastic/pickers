@@ -1,1 +1,12 @@
 div admin!
+div
+  p contestants
+  ul
+    each contestant in contestants
+      li= contestant
+form(method="post")
+  div
+    label Add a contestant
+      input(type="text", name="contestant")
+  div
+    input(type="submit", value="Add")

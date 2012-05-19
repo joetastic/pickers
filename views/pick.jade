@@ -1,1 +1,12 @@
 div pick!
+  h1 Welcome #{user}!
+  h2 Make your picks in order!
+  p picks
+  ul
+    each pick in picks
+      li= pick
+  p contestants
+  ul
+    each contestant in contestants
+      li
+        a(href="/pick/" + contestant)= contestant

@@ -3,4 +3,10 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body!= body
+  body
+  ul
+    li
+      a(href="/pick") pick!
+    li
+      a(href="/admin") admin!
+  div!= body

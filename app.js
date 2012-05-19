@@ -9,11 +9,15 @@ var express = require('express')
 
 var app = module.exports = express.createServer();
 
+var redis = require('redis-url').connect();
+
 var LocalStrategy = require('passport-local').Strategy;
 passport.use(new LocalStrategy(
     function(username, password, done) {
         return done(null, username);
     }));
+
+var RedisStore = require('connect-redis')(express);
 
 passport.serializeUser(function(username, done) {
     done(null, username);
@@ -30,7 +34,7 @@ app.configure(function(){
   app.set('view engine', 'jade');
     app.use(express.cookieParser());
   app.use(express.bodyParser());
-    app.use(express.session({secret: 'caturday'}));
+    app.use(express.session({store: new RedisStore, secret: 'caturday'}));
     app.use(passport.initialize());
     app.use(passport.session());
   app.use(express.methodOverride());
@@ -59,7 +63,7 @@ app.post('/login',
         );
 
 app.get('/pick', ensureAuthenticated, routes.pick);
-app.post('/pick', ensureAuthenticated, routes.pickSubmit);
+app.get('/pick/:pick', ensureAuthenticated, routes.pickSubmit);
 app.get('/admin', ensureAuthenticated, routes.admin);
 app.post('/admin', ensureAuthenticated, routes.adminSubmit);
 

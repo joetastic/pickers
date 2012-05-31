@@ -1,17 +1,23 @@
-div admin!
-div
-  p contestants
-  ul
-    each contestant in contestants
-      li= contestant
-if curweek == 0
-  form(method="post")
-    div
-      label Add a contestant
-        input(type="text", name="contestant")
-    div
-      input(type="submit", value="Add")
-form(action="/admin/bumpweek")
-  div.week Current week: #{curweek}
+extends layout
+
+append body
+  div admin!
   div
-    input(type="submit", value="Next Week")
+    p contestants
+    ul.contestants
+      each contestant in contestants
+        li
+          span= contestant
+          if curweek > 0
+            a.eliminate(href="/admin/eliminate/"+contestant) eliminate
+  if curweek == 0
+    form(method="post")
+      div
+        label Add a contestant
+          input(type="text", name="contestant")
+      div
+        input(type="submit", value="Add")
+  form(action="/admin/bumpweek")
+    div.week Current week: #{curweek}
+    div
+      input(type="submit", value="Next Week")

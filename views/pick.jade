@@ -12,7 +12,7 @@ append body
       h2 Reorder the contestants to make your picks for week #{curweek}!
     p contestants
     form(method="post")
-      ul#contestants(class=has_picked ? "" : "sortable")
+      ul.contestants(class=has_picked ? "" : "sortable")
         each contestant in contestants
           li=contestant
             unless has_picked

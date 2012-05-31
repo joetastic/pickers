@@ -60,6 +60,12 @@ exports.admin = function(req, res){
         });
 };
 
+exports.adminEliminate = function(req, res) {
+    redis.lrem('contestants', 0, req.params.eliminate, function(err) {
+        res.redirect('/admin');
+    });
+}
+
 exports.adminSubmit = function(req, res){
     redis.lpush('contestants', req.body.contestant);
     res.redirect('/admin');

@@ -71,6 +71,7 @@ app.get('/admin/bumpweek', ensureAuthenticated, function(req, res) {
     redis.incr('curweek');
     res.redirect('/admin');
 });
+app.get('/admin/eliminate/:eliminate', ensureAuthenticated, routes.adminEliminate);
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }

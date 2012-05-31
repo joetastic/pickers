@@ -7,21 +7,25 @@ a {
   color: #00B7FF;
 }
 
-#contestants {
+.contestants {
     list-style: decimal;
 }
 
-  #contestants li {
+  .contestants li {
       width: 200px;
       border: 1px solid grey;
       padding: .25em;
       margin: .5em;
   }
 
-  #contestants.sortable li {
+  .contestants.sortable li {
       cursor: move;
   }
 
-  #contestants li:hover {
+  .contestants li:hover {
       background-color: lightgrey;
+  }
+
+  .contestants .eliminate {
+      float: right;
   }

@@ -17,7 +17,7 @@ passport.use(new LocalStrategy(
         return done(null, username);
     }));
 
-var RedisStore = require('connect-redis')(express);
+var RedisStore = require('connect-heroku-redis')(express);
 
 passport.serializeUser(function(username, done) {
     done(null, username);

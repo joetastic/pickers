@@ -4,9 +4,14 @@ div
   ul
     each contestant in contestants
       li= contestant
-form(method="post")
+if curweek == 0
+  form(method="post")
+    div
+      label Add a contestant
+        input(type="text", name="contestant")
+    div
+      input(type="submit", value="Add")
+form(action="/admin/bumpweek")
+  div.week Current week: #{curweek}
   div
-    label Add a contestant
-      input(type="text", name="contestant")
-  div
-    input(type="submit", value="Add")
+    input(type="submit", value="Next Week")

@@ -12,11 +12,14 @@ a {
 }
 
   #contestants li {
-      cursor: move;
       width: 200px;
       border: 1px solid grey;
       padding: .25em;
       margin: .5em;
+  }
+
+  #contestants.sortable li {
+      cursor: move;
   }
 
   #contestants li:hover {

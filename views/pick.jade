@@ -6,12 +6,17 @@ append head
 append body
   div pick!
     h1 Welcome #{user}!
-    h2 Reorder the contestants in your preferred order!
+    if has_picked
+      h2 You've picked for this week, good luck!
+    else
+      h2 Reorder the contestants to make your picks for week #{curweek}!
     p contestants
     form(method="post")
-      ul#contestants
+      ul#contestants(class=has_picked ? "" : "sortable")
         each contestant in contestants
           li=contestant
-            input(type="hidden", name="pick", value=contestant)
-      input(type="submit")
+            unless has_picked
+              input(type="hidden", name="pick", value=contestant)
+      unless has_picked
+        input(type="submit")
   a(href="?flush=1") flush

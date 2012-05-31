@@ -1,3 +1,3 @@
 $(function() {
-    $("#contestants").sortable();
+    $("#contestants.sortable").sortable();
 });

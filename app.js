@@ -67,6 +67,10 @@ app.get('/pick', ensureAuthenticated, routes.pick);
 app.post('/pick', ensureAuthenticated, routes.pickSubmit);
 app.get('/admin', ensureAuthenticated, routes.admin);
 app.post('/admin', ensureAuthenticated, routes.adminSubmit);
+app.get('/admin/bumpweek', ensureAuthenticated, function(req, res) {
+    redis.incr('curweek');
+    res.redirect('/admin');
+});
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }

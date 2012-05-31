@@ -9,19 +9,37 @@ exports.index = function(req, res){
 };
 
 exports.pick = function(req, res){
-    redis.multi()
-        .lrange('contestants', 0, -1)
-        .lrange('picks.' + req.user, 0, -1)
-        .exec(function(err, replies) {
-            //diff contestants - picks
-            var contestants = replies[0].filter(function(i) {return !(replies[1].indexOf(i) > -1);});
-            res.render('pick', { title: 'Express', user: req.user, contestants: contestants, picks: replies[1] });
-        });
+    if(req.query.flush) {
+        redis.del('picks.' + req.user);
+    }
+    redis.lrange('picks.' + req.user, 0, -1, function(err, picks) {
+        console.log("got picks", picks);
+        if(picks.length == 0) {
+            redis.lrange('contestants', 0, -1, function(err, contestants) {
+                res.render('pick', { title: 'Express', user: req.user, contestants: contestants });
+            });
+        } else {
+            res.render('pick', { title: 'Express', user: req.user, contestants: picks });
+        }
+    });
 };
 
 exports.pickSubmit = function(req, res){
-    redis.lpush('picks.' + req.user, req.params.pick);
-    res.redirect('/pick');
+    var m = redis.multi();
+    /*
+    req.body.pick.forEach(function(ob, i) {
+        console.log(i, ob);
+        m.lpush("picks." + req.user, ob);
+    });
+    */
+
+    var pushargs = req.body.pick;
+    pushargs.reverse();
+    pushargs.unshift("picks." + req.user);
+    m.lpush(pushargs);
+    m.exec(function(err, replies) {
+        res.redirect('/pick');
+    });
 };
 
 exports.admin = function(req, res){

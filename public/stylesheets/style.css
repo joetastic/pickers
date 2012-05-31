@@ -6,3 +6,19 @@ body {
 a {
   color: #00B7FF;
 }
+
+#contestants {
+    list-style: decimal;
+}
+
+  #contestants li {
+      cursor: move;
+      width: 200px;
+      border: 1px solid grey;
+      padding: .25em;
+      margin: .5em;
+  }
+
+  #contestants li:hover {
+      background-color: lightgrey;
+  }

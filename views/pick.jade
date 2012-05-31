@@ -1,12 +1,17 @@
-div pick!
-  h1 Welcome #{user}!
-  h2 Make your picks in order!
-  p picks
-  ul
-    each pick in picks
-      li= pick
-  p contestants
-  ul
-    each contestant in contestants
-      li
-        a(href="/pick/" + contestant)= contestant
+extends layout
+
+append head
+  script(type="text/javascript", src="/javascripts/pick.js")
+
+append body
+  div pick!
+    h1 Welcome #{user}!
+    h2 Reorder the contestants in your preferred order!
+    p contestants
+    form(method="post")
+      ul#contestants
+        each contestant in contestants
+          li=contestant
+            input(type="hidden", name="pick", value=contestant)
+      input(type="submit")
+  a(href="?flush=1") flush

@@ -32,6 +32,7 @@ passport.deserializeUser(function(username, done) {
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+    app.set('view options', {layout: false});
     app.use(express.cookieParser());
   app.use(express.bodyParser());
     app.use(express.session({store: new RedisStore, secret: 'caturday'}));
@@ -63,7 +64,7 @@ app.post('/login',
         );
 
 app.get('/pick', ensureAuthenticated, routes.pick);
-app.get('/pick/:pick', ensureAuthenticated, routes.pickSubmit);
+app.post('/pick', ensureAuthenticated, routes.pickSubmit);
 app.get('/admin', ensureAuthenticated, routes.admin);
 app.post('/admin', ensureAuthenticated, routes.adminSubmit);
 

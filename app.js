@@ -9,7 +9,7 @@ var express = require('express')
 
 var app = module.exports = express.createServer();
 
-var redis = require('redis-url').connect();
+var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
 
 var LocalStrategy = require('passport-local').Strategy;
 passport.use(new LocalStrategy(

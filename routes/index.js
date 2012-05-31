@@ -1,4 +1,4 @@
-var redis = require('redis-url').connect()
+var redis = require('redis-url').connect(process.env.REDISTOGO_URL)
 , util = require('util');
 
 /*

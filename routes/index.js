@@ -1,23 +1,47 @@
-var redis = require('redis-url').connect();
+var redis = require('redis-url').connect()
+, util = require('util');
 
 /*
  * GET home page.
  */
 
 exports.index = function(req, res){
-    res.render('index', { title: 'Express' });
+    redis.get('curweek', function(err, curweek) {
+        var multi = redis.multi();
+        for(var i=0; i < curweek; i++) {
+            var keyexpr = 'picks.' + i + '.*';
+            multi.keys(keyexpr);
+        }
+        multi.exec(function(err, weeks) {
+            var picks = []
+            var kmulti = redis.multi();
+            weeks.forEach(function(keys) {
+                keys.forEach(function(key) {
+                    kmulti.lrange(key, 0, -1, function(err, ob) {
+                        var parts = key.split('.');
+                        picks.push({
+                            user: parts[2],
+                            week: parts[1],
+                            picks: ob
+                        });
+                    });
+                });
+            })
+            kmulti.exec(function(err, ob) {
+                res.render('index', { title: 'Express', picks: picks });
+            });
+        });
+    });
 };
 
 exports.pick = function(req, res){
     redis.get('curweek', function(err, curweek) {
         var pickKey = 'picks.' + curweek + '.' + req.user;
-        console.log("pickKey", pickKey);
         if(req.query.flush) {
             redis.del(pickKey);
         }
 
         redis.lrange(pickKey, 0, -1, function(err, picks) {
-            console.log("picks", picks);
             var renderPicks = function(err, contestants, has_picked) {
                 res.render('pick', {
                     title: 'Express',

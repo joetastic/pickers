@@ -1,3 +1,14 @@
-h1= title
-p Welcome to #{title}
-a(href="/pick") pick
+extends layout
+
+append body
+  h1= title
+  p Welcome to #{title}
+  a(href="/pick") pick
+  div.picks
+    each user_pick in picks
+      div.pick
+        div.user= user_pick.user
+        div.week Week #{user_pick.week}
+        ul
+          each pick in user_pick.picks
+            li= pick

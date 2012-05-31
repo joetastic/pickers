@@ -29,3 +29,27 @@ a {
   .contestants .eliminate {
       float: right;
   }
+
+.picks {
+    margin-top: 2em;
+}
+
+.picks .pick {
+    display: inline-block;
+    border: 1px solid grey;
+}
+
+.pick {
+    width: 300px;
+    height: 300px;
+}
+
+.pick .user, .pick .week {
+    text-align: center;
+    padding: .5em;
+    background-color: lightgrey;
+}
+
+.pick li {
+    list-style: decimal;
+}

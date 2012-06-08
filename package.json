@@ -10,5 +10,10 @@
     , "redis-url": "0.1.0"
     , "connect-heroku-redis": "0.1.5"
     , "node-inspector": ">= 0.0.1"
+    , "passport-google": "0.2.0"
   }
 }
+
+// Local Variables:
+// js-indent-level: 2
+// End:

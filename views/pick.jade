@@ -5,7 +5,7 @@ append head
 
 append body
   div pick!
-    h1 Welcome #{user}!
+    h1 Welcome #{user.displayName}!
     if has_picked
       h2 You've picked for this week, good luck!
     else

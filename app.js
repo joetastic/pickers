@@ -11,20 +11,52 @@ var app = module.exports = express.createServer();
 
 var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
 
-var LocalStrategy = require('passport-local').Strategy;
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-        return done(null, username);
-    }));
+var getLocalStrategy = function() {
+    var LocalStrategy = require('passport-local').Strategy;
+    return new LocalStrategy(
+        function(username, password, done) {
+            var identifier = 'local:' + username;
+            var user = {
+                "displayName": username
+            };
+            redis.set(identifier, user);
+            return done(null, {
+                "identifier": identifier,
+                "user": user
+            });
+        });
+};
+
+var getGoogleStrategy = function() {
+    var GoogleStrategy = require('passport-google').Strategy;
+    return new GoogleStrategy(
+        {
+            returnURL: 'http://localhost:3000/auth/google/return',
+            realm: 'http://localhost:3000/'
+        },
+        function(identifier, profile, done) {
+            redis.set(identifier, profile);
+            return done(null, {
+                "identifier": identifier,
+                "user": profile
+            });
+        }
+    );
+};
+
+passport.use(getLocalStrategy());
+passport.use(getGoogleStrategy());
 
 var RedisStore = require('connect-heroku-redis')(express);
 
-passport.serializeUser(function(username, done) {
-    done(null, username);
+passport.serializeUser(function(user, done) {
+    done(null, user.identifier);
 });
 
-passport.deserializeUser(function(username, done) {
-    done(null, username);
+passport.deserializeUser(function(identifier, done) {
+    redis.get(identifier, function(err, profile) {
+        done(null, profile);
+    });
 });
 
 // Configuration
@@ -62,6 +94,16 @@ app.post('/login',
                                           failureRedirect: '/login',
                                           failureFlash: true })
         );
+
+app.get('/auth/google', passport.authenticate('google'));
+app.get('/auth/google/return',
+        passport.authenticate('google', { successRedirect: '/',
+                                          failureRedirect: '/login' }));
+app.get('/logout', function(req, res){
+    req.logOut();
+    res.redirect('/');
+});
+
 
 app.get('/pick', ensureAuthenticated, routes.pick);
 app.post('/pick', ensureAuthenticated, routes.pickSubmit);

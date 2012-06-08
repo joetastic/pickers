@@ -35,6 +35,7 @@ exports.index = function(req, res){
 };
 
 exports.pick = function(req, res){
+    console.log(util.inspect(req.user));
     redis.get('curweek', function(err, curweek) {
         var pickKey = 'picks.' + curweek + '.' + req.user;
         if(req.query.flush) {
